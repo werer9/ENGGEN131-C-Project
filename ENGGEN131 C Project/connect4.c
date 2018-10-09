@@ -4,18 +4,47 @@
 #include "connect4.h"
 
 /*
- *** Please replace this comment with your name and ID number ***
- This is the file that you will be submitting for marking
- Complete the definitions of the functions in this file
- DO NOT REMOVE ANY FUNCTION DEFINITIONS - they all must be present when you submit this file
+    Name: Caelan Murch
+    ID: 234790019
+    Github URL: https://github.com/werer9/ENGGEN131-C-Project
  */
+
+//Swap array element i and j around
+void Swap(int *values, int i, int j) {
+    int temp;
+    temp = values[i];
+    values[i] = values[j];
+    values[j] = temp;
+}
+
+//Iterate over array, swap array elements if in wrong order
+void Bubble(int *values, int length) {
+    for (int i = 0; i < length - 1; i++) {
+        if (values[i] < values[i+1]) {
+            Swap(values, i, i+1);
+        }
+    }
+}
+
+//Function to use bubble sort to find order of values in Second Place prize
+
+void Sort(int *values, int length) {
+    //Call bubble sort function as many times necessary to sort array in
+    //order from large to small
+    
+    for (int i = 0; i < length; i++) {
+        Bubble(values, length);
+    }
+}
 
 int SecondPlacePrize(int prize1, int prize2, int prize3)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
-    return (prize1+prize2+prize3)-(prize1+prize2+prize3);
+    //Put prizes into array
+    int values[] = {prize1, prize2, prize3};
+    //Arrange prizes from large to small
+    Sort(values, 3);
+    //Return value of middle element in array (2nd place)
+    return values[1];
 }
 
 int FourInARow(int values[], int length)
