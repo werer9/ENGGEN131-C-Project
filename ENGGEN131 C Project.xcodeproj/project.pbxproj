@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		FDE06179216CAA1B006AAF20 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FDE06178216CAA1B006AAF20 /* main.c */; };
+		FDE06179216CAA1B006AAF20 /* connect4.c in Sources */ = {isa = PBXBuildFile; fileRef = FDE06178216CAA1B006AAF20 /* connect4.c */; };
+		FDE06183216CAA7D006AAF20 /* test_connect4.c in Sources */ = {isa = PBXBuildFile; fileRef = FDE06181216CAA7C006AAF20 /* test_connect4.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +25,9 @@
 
 /* Begin PBXFileReference section */
 		FDE06175216CAA1B006AAF20 /* ENGGEN131 C Project */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "ENGGEN131 C Project"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FDE06178216CAA1B006AAF20 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		FDE06178216CAA1B006AAF20 /* connect4.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = connect4.c; sourceTree = "<group>"; };
+		FDE0617F216CAA7C006AAF20 /* connect4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = connect4.h; sourceTree = "<group>"; };
+		FDE06181216CAA7C006AAF20 /* test_connect4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test_connect4.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +60,9 @@
 		FDE06177216CAA1B006AAF20 /* ENGGEN131 C Project */ = {
 			isa = PBXGroup;
 			children = (
-				FDE06178216CAA1B006AAF20 /* main.c */,
+				FDE06178216CAA1B006AAF20 /* connect4.c */,
+				FDE0617F216CAA7C006AAF20 /* connect4.h */,
+				FDE06181216CAA7C006AAF20 /* test_connect4.c */,
 			);
 			path = "ENGGEN131 C Project";
 			sourceTree = "<group>";
@@ -118,7 +123,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FDE06179216CAA1B006AAF20 /* main.c in Sources */,
+				FDE06179216CAA1B006AAF20 /* connect4.c in Sources */,
+				FDE06183216CAA7D006AAF20 /* test_connect4.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
