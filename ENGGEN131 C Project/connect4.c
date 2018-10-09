@@ -47,12 +47,17 @@ int SecondPlacePrize(int prize1, int prize2, int prize3)
     return values[1];
 }
 
+//TODO: Work on this fucntion
 int FourInARow(int values[], int length)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
-    return (values[0]+length)-(values[0]+length);
+    for (int i = 0; i < length-4; i++) {
+        if (values[i] == values[i+1] == values[i+2] == values[i+3]) {
+            return i;
+        }
+    }
+    
+    //Default return value
+    return -1;
 }
 
 int BinaryToDecimal(int binary)
