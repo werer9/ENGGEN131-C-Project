@@ -40,9 +40,40 @@ void Sort(int *values, int length)
     }
 }
 
+//Swap array element i and j around for double
+void SwapDouble(double *values, int i, int j)
+{
+    double temp;
+    temp = values[i];
+    values[i] = values[j];
+    values[j] = temp;
+}
+
+//Iterate over array, swap array elements if in wrong order for double
+void BubbleDouble(double *values, int length)
+{
+    for (int i = 0; i < length - 1; i++) {
+        if (values[i] < values[i+1]) {
+            SwapDouble(values, i, i+1);
+        }
+    }
+}
+
+//Function to use bubble sort to find order of values in Second Place prize for double
+
+void SortDouble(double *values, int length)
+{
+    //Call bubble sort function as many times necessary to sort array in
+    //order from large to small
+    
+    for (int i = 0; i < length; i++) {
+        BubbleDouble(values, length);
+    }
+}
+
 //Multiply an integer by any exponent greater than 1
 //Input: number, exponent
-int power(int num, int exp)
+int Power(int num, int exp)
 {
     //Number to multiply by
     int numOriginal;
@@ -85,8 +116,10 @@ int BinaryToDecimal(int binary)
 {
     int decimal, number, remainder, i;
     number = binary;
+    
     //Set LSF to LSB
     decimal = number % 10;
+    //Update number
     number = number / 10;
     
     //First digit calculated before loop
@@ -97,7 +130,7 @@ int BinaryToDecimal(int binary)
         //Divide original number by 10
         number = number / 10;
         //If remainder = 1, incease decimal by 2^i
-        decimal = decimal + remainder * power(2, i);
+        decimal = decimal + remainder * Power(2, i);
         i++;
     }
     
@@ -107,10 +140,17 @@ int BinaryToDecimal(int binary)
 
 double MedianAbility(double abilities[], int length)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
-    return (abilities[0]+length)-(abilities[0]+length);
+    double median;
+    
+    SortDouble(abilities, length);
+    
+    if (length % 2 == 0) {
+        median = (abilities[length/2 - 1] + abilities[length/2])/2;
+    } else {
+        median = abilities[length/2];
+    }
+    
+    return median;
 }
 
 void RemoveSpaces(char *name)
