@@ -40,6 +40,22 @@ void Sort(int *values, int length)
     }
 }
 
+//Multiply an integer by any exponent greater than 1
+//Input: number, exponent
+int power(int num, int exp)
+{
+    //Number to multiply by
+    int numOriginal;
+    numOriginal = num;
+    for (int i = 1; i < exp; i++) {
+        //Keep multiplying number by original number until
+        //multplied to exponent, exp
+        num = num * numOriginal;
+    }
+    
+    return num;
+}
+
 int SecondPlacePrize(int prize1, int prize2, int prize3)
 {
     //Put prizes into array
@@ -67,10 +83,26 @@ int FourInARow(int values[], int length)
 
 int BinaryToDecimal(int binary)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
-    return binary-binary;
+    int decimal, number, remainder, i;
+    number = binary;
+    //Set LSF to LSB
+    decimal = number % 10;
+    number = number / 10;
+    
+    //First digit calculated before loop
+    i = 1;
+    while (number != 0) {
+        //Find remainder divided by 10
+        remainder = number % 10;
+        //Divide original number by 10
+        number = number / 10;
+        //If remainder = 1, incease decimal by 2^i
+        decimal = decimal + remainder * power(2, i);
+        i++;
+    }
+    
+    //return decimal
+    return decimal;
 }
 
 double MedianAbility(double abilities[], int length)

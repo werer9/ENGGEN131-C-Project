@@ -50,6 +50,7 @@ void MyTestFunction(void)
 	printf("\nTESTING TASK THREE:\n");
 	printf("===================\n");
 	printf("   Decimal = %d\n", BinaryToDecimal(101));
+    printf("   Decimal = %d\n", BinaryToDecimal(1111));
 	printf("   Decimal = %d\n", BinaryToDecimal(1));
 	printf("   Decimal = %d\n", BinaryToDecimal(11111111));
 	printf("   Decimal = %d\n", BinaryToDecimal(100000000));
