@@ -10,7 +10,8 @@
  */
 
 //Swap array element i and j around
-void Swap(int *values, int i, int j) {
+void Swap(int *values, int i, int j)
+{
     int temp;
     temp = values[i];
     values[i] = values[j];
@@ -18,7 +19,8 @@ void Swap(int *values, int i, int j) {
 }
 
 //Iterate over array, swap array elements if in wrong order
-void Bubble(int *values, int length) {
+void Bubble(int *values, int length)
+{
     for (int i = 0; i < length - 1; i++) {
         if (values[i] < values[i+1]) {
             Swap(values, i, i+1);
@@ -28,7 +30,8 @@ void Bubble(int *values, int length) {
 
 //Function to use bubble sort to find order of values in Second Place prize
 
-void Sort(int *values, int length) {
+void Sort(int *values, int length)
+{
     //Call bubble sort function as many times necessary to sort array in
     //order from large to small
     
@@ -47,16 +50,18 @@ int SecondPlacePrize(int prize1, int prize2, int prize3)
     return values[1];
 }
 
-//TODO: Work on this fucntion
 int FourInARow(int values[], int length)
 {
-    for (int i = 0; i < length-4; i++) {
-        if (values[i] == values[i+1] == values[i+2] == values[i+3]) {
+    for (int i = 0; i < length-3; i++) {
+        //Declare boolean to check all numbers are the same
+        int check;
+        check = values[i] == values[i+1] && values[i] == values[i+2] && values[i] == values[i+3];
+        //If boolean is true return value of i
+        if (check)
             return i;
-        }
     }
     
-    //Default return value
+    //Default return value if no numbers are found to be in a row
     return -1;
 }
 
