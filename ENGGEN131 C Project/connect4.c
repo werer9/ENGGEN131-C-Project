@@ -87,6 +87,23 @@ int Power(int num, int exp)
     return num;
 }
 
+int isFourInARow(int player, int board[MAX_SIZE][MAX_SIZE], int size) {
+    //Think about a more efficient implementation + diagonal implementation
+    
+    for (int i = 0; i < size-4; i++) {
+        for (int j = 0; j < size-4; j++) {
+            if (board[i][j] == player && board[i + 1][j] == player &&
+                board[i + 2][j] == player && board[i + 3][j] == player) {
+                return 1;
+            } else if (board[i][j] == player && board[i][j + 1] == player &&
+                  board[i][j + 2] == player && board[i][j + 3] == player) {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 int SecondPlacePrize(int prize1, int prize2, int prize3)
 {
     //Put prizes into array
@@ -280,9 +297,19 @@ void AddMoveToBoard(int board[MAX_SIZE][MAX_SIZE], int size, char side, int move
 
 int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, int col)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
+    int zeroCount;
+    zeroCount = 0;
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (board[i][j] == 0)
+                zeroCount++;
+        }
+    }
+    
+    if (zeroCount == 0) {
+        return player;
+    }
+    
     return (board[0][0]+size+player+row+col)-(board[0][0]+size+player+row+col);
 }
 
