@@ -202,12 +202,80 @@ void InitialiseBoard(int board[MAX_SIZE][MAX_SIZE], int size)
 
 void AddMoveToBoard(int board[MAX_SIZE][MAX_SIZE], int size, char side, int move, int player, int *lastRow, int *lastCol)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
-    *lastRow = 0;
-    *lastCol = 0;
-    board[0][0] = (size+side+move+player)-(size+side+move+player);
+    int isVertical, i;
+    
+    //Check which side the piece is being added
+    //Check if peice will move vertical and which
+    //index it will start from
+    switch (side) {
+        case 'N':
+            isVertical = 1;
+            i = 0;
+            break;
+        case 'E':
+            isVertical = 0;
+            i = size-1;
+            break;
+        case 'W':
+            isVertical = 0;
+            i = 0;
+            break;
+        case 'S':
+            isVertical = 1;
+            i = size-1;
+            break;
+        default:
+            //TODO: Check what default should be...
+            printf("Error, invalid direction!");
+            return;
+    }
+    
+    //If it is horizontal
+    if (!isVertical) {
+        if (i == 0) { //Starting from left
+            board[move][i] = player;
+            while (board[move][i + 1] == 0 && i < size - 1) {
+                //Move piece until obstacle or end of board
+                board[move][i + 1] = player;
+                board[move][i] = 0;
+                i++;
+            }
+        } else if (i == size-1) { //Starting from right
+            board[move][i] = player;
+            while (board[move][i - 1] == 0 && i > 0) {
+                //Move piece until obstacle or end of board
+                board[move][i - 1] = player;
+                board[move][i] = 0;
+                i--;
+            }
+        }
+        
+        //Record position the piece stops at
+        *lastRow = move;
+        *lastCol = i;
+    } else { //If it is vertical
+        if (i == 0) { //Starting from top
+            board[i][move] = player;
+            while (board[i + 1][move] == 0 && i < size - 1) {
+                //Move piece until obstacle or end of board
+                board[i + 1][move] = player;
+                board[i][move] = 0;
+                i++;
+            }
+        } else if (i == size-1) { //Starting from bottom
+            board[i][move] = player;
+            while (board[i - 1][move] == 0 && i > 0) {
+                //Move piece until obstacle or end of board
+                board[i - 1][move] = player;
+                board[i][move] = 0;
+                i--;
+            }
+        }
+        
+        //Record position piece stops at 
+        *lastRow = i;
+        *lastCol = move;
+    }
 }
 
 int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, int col)
