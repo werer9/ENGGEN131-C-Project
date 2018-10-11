@@ -155,10 +155,26 @@ double MedianAbility(double abilities[], int length)
 
 void RemoveSpaces(char *name)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
-    name[0] = '\0';
+    int i;
+    i = 0;
+    //Iterate through entire string
+    while (name[i] != '\0') {
+        //If there are two spaces in a row
+        if (name[i] == ' ' && name[i+1] == ' ') {
+            int j;
+            j = i+1;
+            //Move all characters back an index
+            //i.e remove a space
+            while (name[j] != '\0') {
+                name[j] = name[j+1];
+                j++;
+            }
+        } else {
+            //If there aren't two consecutive spaces check next character
+            i++;
+        }
+        
+    }
 }
 
 void InitialiseBoard(int board[MAX_SIZE][MAX_SIZE], int size)
