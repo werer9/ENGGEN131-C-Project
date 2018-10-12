@@ -88,16 +88,22 @@ int Power(int num, int exp)
 }
 
 int isFourInARow(int player, int board[MAX_SIZE][MAX_SIZE], int size) {
-    //Think about a more efficient implementation + diagonal implementation
+    //TODO: Fix function
     
-    for (int i = 0; i < size-4; i++) {
-        for (int j = 0; j < size-4; j++) {
-            if (board[i][j] == player && board[i + 1][j] == player &&
-                board[i + 2][j] == player && board[i + 3][j] == player) {
-                return 1;
-            } else if (board[i][j] == player && board[i][j + 1] == player &&
-                  board[i][j + 2] == player && board[i][j + 3] == player) {
-                return 1;
+    for (int i = 2; i < size-1; i++) {
+        for (int j = 2; j < size-1; j++) {
+            if (board[i][j] == player && board[i - 1][j] == player &&
+                board[i - 2][j] == player && board[i + 1][j] == player) {
+                return player;
+            } else if (board[i][j] == player && board[i][j - 1] == player &&
+                  board[i][j - 2] == player && board[i][j + 1] == player) {
+                return player;
+            } else if (board[i][j] == player && board[i-1][j-1] == player &&
+                       board[i-2][j-2] == player && board[i+1][j+1]) {
+                return player;
+            } else if (board[i][j] == player && board[i+1][j-1] == player &&
+                       board[i-1][j+1] == player && board[i-2][j+2] == player) {
+                return player;
             }
         }
     }
@@ -310,7 +316,7 @@ int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, 
         return player;
     }
     
-    return (board[0][0]+size+player+row+col)-(board[0][0]+size+player+row+col);
+    return isFourInARow(player, board, size);
 }
 
 void GetDisplayBoardString(int board[MAX_SIZE][MAX_SIZE], int size, char *boardString)
