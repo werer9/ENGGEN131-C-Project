@@ -178,13 +178,16 @@ void MyTestFunction(void)
 	char boardString[250];
 	InitialiseBoard(board9, size9);
 	GetDisplayBoardString(board9, size9, boardString);
-	printf("   The length of the board string is: %d\n", strlen(boardString));
+	printf("   The length of the board string is: %d\n", (int)strlen(boardString));
 	printf("%s", boardString);
 	size9 = 10;
 	InitialiseBoard(board9, size9);
 	GetDisplayBoardString(board9, size9, boardString);
-	printf("   The length of the board string is: %d\n", strlen(boardString));
+	printf("   The length of the board string is: %d\n", (int)strlen(boardString));
 	printf("%s", boardString);
+    GetDisplayBoardString(board8, size8, boardString);
+    printf("   The length of the board string is: %d\n", (int)strlen(boardString));
+    printf("%s", boardString);
 
 	// An example of code that you could use to test Task Ten.
 	printf("\nTESTING TASK TEN:\n");

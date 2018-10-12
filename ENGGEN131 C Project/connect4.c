@@ -286,13 +286,65 @@ int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, 
     return (board[0][0]+size+player+row+col)-(board[0][0]+size+player+row+col);
 }
 
+void ConstructBorder(int size, char *boardString) {
+    int count;
+    count = 0;
+    for (int i = 0; i < size + 4; i++) {
+        for (int j = 0; j < size + 5; j++) {
+            if (j == size + 4) {
+                boardString[count] = '\n';
+            } else if (i == 0 || i == size + 3) {
+                if (j < 2 || j > size + 1) {
+                    boardString[count] = '-';
+                } else {
+                    boardString[count] = (i == 0) ? 'N' : 'S';
+                }
+            } else if (i == 1 || i == size + 2) {
+                if (j < 2 || j > size + 1) {
+                    boardString[count] = '-';
+                } else {
+                    boardString[count] = '0' + (j - 2);
+                }
+            } else {
+                if (j == 0) {
+                    boardString[count] = 'W';
+                    boardString[count + 1] = '0' + (i - 2);
+                    count++;
+                    j++;
+                } else if (j == size + 2) {
+                    boardString[count] = '0' + (i - 2);
+                    boardString[count + 1] = 'E';
+                    count++;
+                    j++;
+                } else {
+                    boardString[count] = '.';
+                }
+            }
+            count++;
+        }
+    }
+    boardString[count] = '\0';
+}
+
 void GetDisplayBoardString(int board[MAX_SIZE][MAX_SIZE], int size, char *boardString)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
-    board[0][0] = size-size;
-    boardString[0] = '\0';
+    ConstructBorder(size, boardString);
+    
+    int count;
+    count = (size+5)*2 + 2;
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (board[i][j] == 3){
+                boardString[count] = '#';
+            } else if (board[i][j] == 1) {
+                boardString[count] = 'X';
+            } else if (board[i][j] == 2) {
+                boardString[count] = 'O';
+            }
+            count++;
+        }
+        count += 5;
+    }
 }
 
 void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move)
