@@ -6,7 +6,6 @@
 /*
     Name: Caelan Murch
     ID: 234790019
-    Github URL: https://github.com/werer9/ENGGEN131-C-Project
  */
 
 //Swap array element i and j around
