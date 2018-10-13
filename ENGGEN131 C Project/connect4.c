@@ -232,6 +232,9 @@ void AddMoveToBoard(int board[MAX_SIZE][MAX_SIZE], int size, char side, int move
     
     //If it is horizontal
     if (!isVertical) {
+        //Do not place token if token is at edge of board
+        if (board[move][i] != 0)
+            return;
         if (i == 0) { //Starting from left
             board[move][i] = player;
             while (board[move][i + 1] == 0 && i < size - 1) {
@@ -254,6 +257,9 @@ void AddMoveToBoard(int board[MAX_SIZE][MAX_SIZE], int size, char side, int move
         *lastRow = move;
         *lastCol = i;
     } else { //If it is vertical
+        //Do not place token if token is at edge of board
+        if (board[i][move] != 0)
+            return;
         if (i == 0) { //Starting from top
             board[i][move] = player;
             while (board[i + 1][move] == 0 && i < size - 1) {
