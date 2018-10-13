@@ -280,10 +280,60 @@ void AddMoveToBoard(int board[MAX_SIZE][MAX_SIZE], int size, char side, int move
 
 int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, int col)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
-    return (board[0][0]+size+player+row+col)-(board[0][0]+size+player+row+col);
+    //Check who made last move to fill board
+    int zeroCount;
+    zeroCount = 0;
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (board[i][j] == 0)
+                zeroCount++;
+        }
+    }
+    
+    if (zeroCount == 0) {
+        return player;
+    }
+    
+    //Check 4 in a row in any direction and check this is part of row and col
+    //Coordinates passed in as function parameter
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (board[i][j] == player) {
+                //Check vertical 4 in a row
+                if (i < 5) {
+                    if (board[i+1][j] == player && board[i+2][j] == player
+                        && board[i+3][j] == player
+                        && (i <= row <= i+3) && col == j)
+                        return player;
+                }
+                //Check horizontal 4 in a row
+                if (j < 5) {
+                    if (board[i][j+1] == player && board[i][j+2] == player
+                        && board[i][j+3] == player
+                        && (j <= col <= j+3) && row == i)
+                        return player;
+                }
+                //Check diagonal 4 in a row
+                if (i > 0 && j > 0 && i < size-2 && j < size-2) {
+                    if (board[i-1][j-1] == player && board[i+1][j+1] == player
+                        && board[i+2][j+2] == player
+                        && (i-1 <= col <= i+2) && (j-1 <= row <= j+2))
+                        return player;
+                    if (board[i-1][j+1] == player && board[i-2][j+2] == player
+                        && board[i+1][j-1] == player
+                        && (i-1 <= col <= i+2) && (j-1 <= row <= j+2))
+                        return player;
+                    if (board[i-1][j+1] == player && board[i+1][j-1] == player
+                        && board[i+2][j-2] == player
+                        && (i-1 <= col <= i+2) && (j-1 <= row <= j+2))
+                        return player;
+                }
+            }
+        }
+    }
+    
+    //return 0 if none of conditions for game win are satisfied
+    return 0;
 }
 
 void ConstructBorder(int size, char *boardString) {

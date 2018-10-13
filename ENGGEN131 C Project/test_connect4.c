@@ -168,6 +168,28 @@ void MyTestFunction(void)
 	printf("   Checking for win for Player 1 in [%d, %d]\n", rowPos, colPos);
 	hasWon = CheckGameOver(board8, size8, 1, rowPos, colPos);
 	printf("   Result = %d\n", hasWon);
+    InitialiseBoard(board8, size8);
+    AddMoveToBoard(board8, size8, 'N', 0, 1, &rowPos, &colPos);
+    AddMoveToBoard(board8, size8, 'N', 0, 2, &rowPos, &colPos);
+    AddMoveToBoard(board8, size8, 'N', 0, 1, &rowPos, &colPos);
+    AddMoveToBoard(board8, size8, 'N', 1, 2, &rowPos, &colPos);
+    AddMoveToBoard(board8, size8, 'N', 0, 1, &rowPos, &colPos);
+    AddMoveToBoard(board8, size8, 'N', 1, 2, &rowPos, &colPos);
+    AddMoveToBoard(board8, size8, 'N', 1, 1, &rowPos, &colPos);
+    AddMoveToBoard(board8, size8, 'E', 4, 2, &rowPos, &colPos);
+    AddMoveToBoard(board8, size8, 'E', 3, 1, &rowPos, &colPos);
+    AddMoveToBoard(board8, size8, 'E', 0, 2, &rowPos, &colPos);
+    AddMoveToBoard(board8, size8, 'E', 4, 1, &rowPos, &colPos);
+    for (int i = 0; i < size8; i++) {
+        printf("   ");
+        for (int j = 0; j < size8; j++) {
+            printf("%d ", board8[i][j]);
+        }
+        printf("\n");
+    }
+    printf("   Checking for win for Player 1 in [%d, %d]\n", rowPos, colPos);
+    hasWon = CheckGameOver(board8, size8, 1, rowPos, colPos);
+    printf("   Result = %d\n", hasWon);
 
 	// An example of code that you could use to test Task Nine.
 	// You should write additional tests of your own
