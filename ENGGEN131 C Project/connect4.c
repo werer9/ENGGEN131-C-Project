@@ -418,14 +418,14 @@ void GetMoveBot2(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 	int row, col;
 	row = 0; col = 0;
 	
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < size; j++) {
-			if (board[i][j] == player) {
-				GetIdealMove(board, side, move, i, j);
-				return;
-			}
-		}
-	}
+//	for (int i = 0; i < size; i++) {
+//		for (int j = 0; j < size; j++) {
+//			if (board[i][j] == player) {
+//				GetIdealMove(board, side, move, i, j);
+//				return;
+//			}
+//		}
+//	}
 	
 	switch ((rand() % 4) + 1) {
 		case 1:
