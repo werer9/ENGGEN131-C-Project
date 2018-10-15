@@ -333,6 +333,13 @@ int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, 
                         && (i-1 <= col <= i+2) && (j-1 <= row <= j+2))
                         return player;
                 }
+                
+                if (i > 0 && j > 1 && i < size-2 && j < size-1) {
+                    if (board[i-1][j+1] == player && board[i+1][j-1] == player
+                        && board[i+2][j-2] == player
+                        && (i-1 <= col <= i+2) && (j-1 <= row <= j+2))
+                        return player;
+                }
             }
         }
     }
