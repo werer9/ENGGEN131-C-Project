@@ -8,83 +8,19 @@
     ID: 234790019
  */
 
-//Swap array element i and j around
-void Swap(int *values, int i, int j)
-{
-    int temp;
-    temp = values[i];
-    values[i] = values[j];
-    values[j] = temp;
-}
+//TODO: Move all helper functions to bottom of page
+//TODO: Helper function prototypes go here:
 
-//Iterate over array, swap array elements if in wrong order
-void Bubble(int *values, int length)
-{
-    for (int i = 0; i < length - 1; i++) {
-        if (values[i] < values[i+1]) {
-            Swap(values, i, i+1);
-        }
-    }
-}
+//Helper function prototypes
+void GetIdealMove(int board[MAX_SIZE][MAX_SIZE], char *side, int *move, int i, int j);
+void Swap(int *values, int i, int j);
+void Bubble(int *values, int length);
+void Sort(int *values, int length);
+void SwapDouble(double *values, int i, int j);
+void BubbleDouble(double *values, int length);
+void SortDouble(double *values, int length);
+int Power(int num, int exp);
 
-//Function to use bubble sort to find order of values in Second Place prize
-
-void Sort(int *values, int length)
-{
-    //Call bubble sort function as many times necessary to sort array in
-    //order from large to small
-    
-    for (int i = 0; i < length; i++) {
-        Bubble(values, length);
-    }
-}
-
-//Swap array element i and j around for double
-void SwapDouble(double *values, int i, int j)
-{
-    double temp;
-    temp = values[i];
-    values[i] = values[j];
-    values[j] = temp;
-}
-
-//Iterate over array, swap array elements if in wrong order for double
-void BubbleDouble(double *values, int length)
-{
-    for (int i = 0; i < length - 1; i++) {
-        if (values[i] < values[i+1]) {
-            SwapDouble(values, i, i+1);
-        }
-    }
-}
-
-//Function to use bubble sort to find order of values in Second Place prize for double
-
-void SortDouble(double *values, int length)
-{
-    //Call bubble sort function as many times necessary to sort array in
-    //order from large to small
-    
-    for (int i = 0; i < length; i++) {
-        BubbleDouble(values, length);
-    }
-}
-
-//Multiply an integer by any exponent greater than 1
-//Input: number, exponent
-int Power(int num, int exp)
-{
-    //Number to multiply by
-    int numOriginal;
-    numOriginal = num;
-    for (int i = 1; i < exp; i++) {
-        //Keep multiplying number by original number until
-        //multplied to exponent, exp
-        num = num * numOriginal;
-    }
-    
-    return num;
-}
 
 int SecondPlacePrize(int prize1, int prize2, int prize3)
 {
@@ -202,7 +138,19 @@ void InitialiseBoard(int board[MAX_SIZE][MAX_SIZE], int size)
 void AddMoveToBoard(int board[MAX_SIZE][MAX_SIZE], int size, char side, int move, int player, int *lastRow, int *lastCol)
 {
     int isVertical, i;
-    
+	
+	//	TODO: Fix following bug
+	//	--NNNNN--
+	//	--01234--
+	//	W0XXOXX0E
+	//	W1XO.OX1E
+	//	W2XX#OX2E
+	//	W3OOXXO3E
+	//	W4XXOOX4E
+	//	--01234--
+	//	--SSSSS--
+	//	Player 1: enter move [side/position]:
+	
     //Check which side the piece is being added
     //Check if peice will move vertical and which
     //index it will start from
@@ -285,7 +233,20 @@ void AddMoveToBoard(int board[MAX_SIZE][MAX_SIZE], int size, char side, int move
 
 int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, int col)
 {
-    //Check who made last move to fill board
+
+//	TODO: Fix following bug
+//	--NNNNN--
+//	--01234--
+//	W0XXOXX0E
+//	W1XO.OX1E
+//	W2XX#OX2E
+//	W3OOXXO3E
+//	W4XXOOX4E
+//	--01234--
+//	--SSSSS--
+//	Player 1: enter move [side/position]:
+	
+	//Check who made last move to fill board
     int zeroCount;
     zeroCount = 0;
     for (int i = 0; i < size; i++) {
@@ -301,6 +262,9 @@ int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, 
     
     //Check 4 in a row in any direction and check this is part of row and col
     //Coordinates passed in as function parameter
+    
+    
+    //TODO: Remove all of the loops...
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             if (board[i][j] == player) {
@@ -411,20 +375,171 @@ void GetDisplayBoardString(int board[MAX_SIZE][MAX_SIZE], int size, char *boardS
 
 void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
-    *side = 'N';
-    *move = 0;
-    board[0][0] = (size+player)-(size+player);
+    time_t t;
+    srand((unsigned) time(&t));
+    int row, col;
+	row = 0; col = 0;
+    
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (board[i][j] == player) {
+				GetIdealMove(board, side, move, i, j);
+                return;
+            }
+        }
+    }
+	
+	switch ((rand() % 4) + 1) {
+		case 1:
+			*side = 'N';
+			break;
+		case 2:
+			*side = 'E';
+			break;
+		case 3:
+			*side = 'S';
+			break;
+		case 4:
+			*side = 'W';
+			break;
+		default:
+			*side = 'N';
+			break;
+	}
+	
+	*move = rand() % size;
+	
 }
 
 void GetMoveBot2(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move)
 {
-    // This definition is WRONG.  To avoid compiler warnings, all of the input variables have been
-    // referred to below.  Fix this function by *deleting this comment* and the code below, and
-    // writing a correct definition.  If you do not attempt this task, leave this definition unchanged.
-    *side = 'N';
-    *move = 0;
-    board[0][0] = (size+player)-(size+player);
+	time_t t;
+	srand((unsigned) time(&t));
+	int row, col;
+	row = 0; col = 0;
+	
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			if (board[i][j] == player) {
+				GetIdealMove(board, side, move, i, j);
+				return;
+			}
+		}
+	}
+	
+	switch ((rand() % 4) + 1) {
+		case 1:
+			*side = 'N';
+			break;
+		case 2:
+			*side = 'E';
+			break;
+		case 3:
+			*side = 'S';
+			break;
+		case 4:
+			*side = 'W';
+			break;
+		default:
+			*side = 'N';
+			break;
+	}
+	
+	*move = rand() % size;
+}
+
+void GetIdealMove(int board[MAX_SIZE][MAX_SIZE], char *side, int *move, int i, int j) {
+	if (i > 0) {
+		for (; i <= 0; i--) {
+			if (board[i][j] == 0) {
+				*side = 'N';
+				*move = j;
+			}
+		}
+	} else if (j > 0) {
+		for (; j <= 0; j--) {
+			if (board[i][j] == 0) {
+				*side = 'W';
+				*move = i;
+			}
+		}
+	}
+}
+
+//Swap array element i and j around
+void Swap(int *values, int i, int j)
+{
+	int temp;
+	temp = values[i];
+	values[i] = values[j];
+	values[j] = temp;
+}
+
+//Iterate over array, swap array elements if in wrong order
+void Bubble(int *values, int length)
+{
+	for (int i = 0; i < length - 1; i++) {
+		if (values[i] < values[i+1]) {
+			Swap(values, i, i+1);
+		}
+	}
+}
+
+//Function to use bubble sort to find order of values in Second Place prize
+
+void Sort(int *values, int length)
+{
+	//Call bubble sort function as many times necessary to sort array in
+	//order from large to small
+	
+	for (int i = 0; i < length; i++) {
+		Bubble(values, length);
+	}
+}
+
+//Swap array element i and j around for double
+void SwapDouble(double *values, int i, int j)
+{
+	double temp;
+	temp = values[i];
+	values[i] = values[j];
+	values[j] = temp;
+}
+
+//Iterate over array, swap array elements if in wrong order for double
+void BubbleDouble(double *values, int length)
+{
+	for (int i = 0; i < length - 1; i++) {
+		if (values[i] < values[i+1]) {
+			SwapDouble(values, i, i+1);
+		}
+	}
+}
+
+//Function to use bubble sort to find order of values in Second Place prize for double
+
+void SortDouble(double *values, int length)
+{
+	//Call bubble sort function as many times necessary to sort array in
+	//order from large to small
+	
+	for (int i = 0; i < length; i++) {
+		BubbleDouble(values, length);
+	}
+}
+
+//Multiply an integer by any exponent greater than 1
+//Input: number, exponent
+int Power(int num, int exp)
+{
+	//Number to multiply by
+	int numOriginal;
+	numOriginal = num;
+	for (int i = 1; i < exp; i++) {
+		//Keep multiplying number by original number until
+		//multplied to exponent, exp
+		num = num * numOriginal;
+	}
+	
+	return num;
 }
