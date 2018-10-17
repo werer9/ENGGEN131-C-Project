@@ -18,7 +18,7 @@ void BubbleDouble(double *values, int length);
 void SortDouble(double *values, int length);
 int Power(int num, int exp);
 void LookForWinningMove(int board[MAX_SIZE][MAX_SIZE], int size , char *dir, int *move);
-int checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2], int size , char *dir, int *move);
+void checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2], int size , char *dir, int *move);
 
 
 int SecondPlacePrize(int prize1, int prize2, int prize3)
@@ -240,8 +240,6 @@ int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, 
     //Check 4 in a row in any direction and check this is part of row and col
     //Coordinates passed in as function parameter
     
-    
-    //TODO: Remove all of the loops...
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             if (board[i][j] == player) {
@@ -556,22 +554,19 @@ void LookForWinningMove(int board[MAX_SIZE][MAX_SIZE], int size, char *dir, int 
 	}
 	
 	//Check if there is another token blocking the 3 in a row. If not use the first clear path found
-	if (checkForFreeSpace(board, coordinates, size, dir, move)) {
-		//Do nothing
-	} else {
-		//If no moves are available, exit
-		return;
-	}
+	checkForFreeSpace(board, coordinates, size, dir, move);
 	
 }
 
-int checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2],int size , char *dir, int *move) {
+void checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2],int size , char *dir, int *move) {
 	//Check for both coordinates
 	int i;
 	//Check first coordinates are not at start of board
 	if (coordinates[0][0] == -1)
 		i = 1;
-	for (i = 0; i < 2; i++){
+	else
+		i = 0;
+	for (; i < 2; i++){
 		//Check below
 		int notZeroCount;
 		notZeroCount = 0;
@@ -583,7 +578,7 @@ int checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2],int s
 		if (notZeroCount == 0) {
 			*dir = 'S';
 			*move = coordinates[i][1];
-			return 1;
+			return;
 		}
 		
 		notZeroCount = 0;
@@ -597,7 +592,7 @@ int checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2],int s
 		if (notZeroCount == 0) {
 			*dir = 'N';
 			*move = coordinates[i][1];
-			return 1;
+			return;
 		}
 		
 		notZeroCount = 0;
@@ -611,7 +606,7 @@ int checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2],int s
 		if (notZeroCount == 0) {
 			*dir = 'E';
 			*move = coordinates[i][0];
-			return 1;
+			return;
 		}
 		
 		notZeroCount = 0;
@@ -625,10 +620,8 @@ int checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2],int s
 		if (notZeroCount == 0) {
 			*dir = 'W';
 			*move = coordinates[i][0];
-			return 1;
+			return;
 		}
 		
-		notZeroCount = 0;
 	}
-	return 0;
 }
