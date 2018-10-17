@@ -357,38 +357,27 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
     int row, col;
 	row = 0; col = 0;
 	
-	LookForWinningMove(board, size, side, move);
-	if (*move == -1) {
-		
-		for (int i = 0; i < size; i++) {
-			for (int j = 0; j < size; j++) {
-				if (board[i][j] == player) {
-					GetIdealMove(board, side, move, i, j);
-					return;
-				}
-			}
-		}
-		
-		switch ((rand() % 4) + 1) {
-			case 1:
-				*side = 'N';
-				break;
-			case 2:
-				*side = 'E';
-				break;
-			case 3:
-				*side = 'S';
-				break;
-			case 4:
-				*side = 'W';
-				break;
-			default:
-				*side = 'N';
-				break;
-		}
-		
-		*move = rand() % size;
+	switch ((rand() % 4) + 1) {
+		case 1:
+			*side = 'N';
+			break;
+		case 2:
+			*side = 'E';
+			break;
+		case 3:
+			*side = 'S';
+			break;
+		case 4:
+			*side = 'W';
+			break;
+		default:
+			*side = 'N';
+			break;
 	}
+	
+	*move = rand() % size;
+	
+	LookForWinningMove(board, size, side, move);
 	
 }
 
@@ -408,28 +397,27 @@ void GetMoveBot2(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 //		}
 //	}
 	
-	LookForWinningMove(board, size, side, move);
-	if (*move == -1) {
-		switch ((rand() % 4) + 1) {
-			case 1:
-				*side = 'N';
-				break;
-			case 2:
-				*side = 'E';
-				break;
-			case 3:
-				*side = 'S';
-				break;
-			case 4:
-				*side = 'W';
-				break;
-			default:
-				*side = 'N';
-				break;
-		}
-		
-		*move = rand() % size;
+	switch ((rand() % 4) + 1) {
+		case 1:
+			*side = 'N';
+			break;
+		case 2:
+			*side = 'E';
+			break;
+		case 3:
+			*side = 'S';
+			break;
+		case 4:
+			*side = 'W';
+			break;
+		default:
+			*side = 'N';
+			break;
 	}
+	
+	*move = rand() % size;
+	
+	LookForWinningMove(board, size, side, move);
 }
 
 void GetIdealMove(int board[MAX_SIZE][MAX_SIZE], char *side, int *move, int i, int j) {
@@ -560,6 +548,8 @@ void LookForWinningMove(int board[MAX_SIZE][MAX_SIZE], int size, char *dir, int 
 					}
 					
 					coordinates[1][0] = i; coordinates[1][1] = j+3;
+				} else {
+					return;
 				} //TODO: Add diagonals
 			}
 		}
@@ -569,8 +559,8 @@ void LookForWinningMove(int board[MAX_SIZE][MAX_SIZE], int size, char *dir, int 
 	if (checkForFreeSpace(board, coordinates, size, dir, move)) {
 		//Do nothing
 	} else {
-		//If no moves are available
-		*dir = 'Z'; *move = -1;
+		//If no moves are available, exit
+		return;
 	}
 	
 }
