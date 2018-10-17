@@ -8,9 +8,6 @@
     ID: 234790019
  */
 
-//TODO: Move all helper functions to bottom of page
-//TODO: Helper function prototypes go here:
-
 //Helper function prototypes
 void GetIdealMove(int board[MAX_SIZE][MAX_SIZE], char *side, int *move, int i, int j);
 void Swap(int *values, int i, int j);
@@ -359,35 +356,39 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
     srand((unsigned) time(&t));
     int row, col;
 	row = 0; col = 0;
-    
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            if (board[i][j] == player) {
-				GetIdealMove(board, side, move, i, j);
-                return;
-            }
-        }
-    }
 	
-	switch ((rand() % 4) + 1) {
-		case 1:
-			*side = 'N';
-			break;
-		case 2:
-			*side = 'E';
-			break;
-		case 3:
-			*side = 'S';
-			break;
-		case 4:
-			*side = 'W';
-			break;
-		default:
-			*side = 'N';
-			break;
+	LookForWinningMove(board, size, side, move);
+	if (*move == -1) {
+		
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				if (board[i][j] == player) {
+					GetIdealMove(board, side, move, i, j);
+					return;
+				}
+			}
+		}
+		
+		switch ((rand() % 4) + 1) {
+			case 1:
+				*side = 'N';
+				break;
+			case 2:
+				*side = 'E';
+				break;
+			case 3:
+				*side = 'S';
+				break;
+			case 4:
+				*side = 'W';
+				break;
+			default:
+				*side = 'N';
+				break;
+		}
+		
+		*move = rand() % size;
 	}
-	
-	*move = rand() % size;
 	
 }
 
@@ -407,25 +408,28 @@ void GetMoveBot2(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 //		}
 //	}
 	
-	switch ((rand() % 4) + 1) {
-		case 1:
-			*side = 'N';
-			break;
-		case 2:
-			*side = 'E';
-			break;
-		case 3:
-			*side = 'S';
-			break;
-		case 4:
-			*side = 'W';
-			break;
-		default:
-			*side = 'N';
-			break;
+	LookForWinningMove(board, size, side, move);
+	if (*move == -1) {
+		switch ((rand() % 4) + 1) {
+			case 1:
+				*side = 'N';
+				break;
+			case 2:
+				*side = 'E';
+				break;
+			case 3:
+				*side = 'S';
+				break;
+			case 4:
+				*side = 'W';
+				break;
+			default:
+				*side = 'N';
+				break;
+		}
+		
+		*move = rand() % size;
 	}
-	
-	*move = rand() % size;
 }
 
 void GetIdealMove(int board[MAX_SIZE][MAX_SIZE], char *side, int *move, int i, int j) {
@@ -573,9 +577,68 @@ void LookForWinningMove(int board[MAX_SIZE][MAX_SIZE], int size, char *dir, int 
 
 int checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2],int size , char *dir, int *move) {
 	//Check for both coordinates
-	for (int i = 0; i < 2; i++){
-		//Check above
+	int i;
+	//Check first coordinates are not at start of board
+	if (coordinates[0][0] == -1)
+		i = 1;
+	for (i = 0; i < 2; i++){
+		//Check below
+		int notZeroCount;
+		notZeroCount = 0;
+		for (int j = coordinates[i][0]; j < size; j++) {
+			if (board[j][coordinates[i][1]] != 0)
+				notZeroCount++;
+		}
 		
+		if (notZeroCount == 0) {
+			*dir = 'S';
+			*move = coordinates[i][1];
+			return 1;
+		}
+		
+		notZeroCount = 0;
+		
+		//Check above
+		for (int j = coordinates[i][0]; j >= 0; j--) {
+			if (board[j][coordinates[i][1]] != 0)
+				notZeroCount++;
+		}
+		
+		if (notZeroCount == 0) {
+			*dir = 'N';
+			*move = coordinates[i][1];
+			return 1;
+		}
+		
+		notZeroCount = 0;
+		
+		//Check right
+		for (int j = coordinates[i][1]; j < size; j++) {
+			if (board[coordinates[i][0]][j] != 0)
+				notZeroCount++;
+		}
+		
+		if (notZeroCount == 0) {
+			*dir = 'E';
+			*move = coordinates[i][0];
+			return 1;
+		}
+		
+		notZeroCount = 0;
+		
+		//Check left
+		for (int j = coordinates[i][1]; j >= 0; j--) {
+			if (board[coordinates[i][0]][j] != 0)
+				notZeroCount++;
+		}
+		
+		if (notZeroCount == 0) {
+			*dir = 'W';
+			*move = coordinates[i][0];
+			return 1;
+		}
+		
+		notZeroCount = 0;
 	}
 	return 0;
 }
