@@ -20,6 +20,8 @@ void SwapDouble(double *values, int i, int j);
 void BubbleDouble(double *values, int length);
 void SortDouble(double *values, int length);
 int Power(int num, int exp);
+void LookForWinningMove(int board[MAX_SIZE][MAX_SIZE], int size , char *dir, int *move);
+int checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2], int size , char *dir, int *move);
 
 
 int SecondPlacePrize(int prize1, int prize2, int prize3)
@@ -139,18 +141,6 @@ void AddMoveToBoard(int board[MAX_SIZE][MAX_SIZE], int size, char side, int move
 {
     int isVertical, i;
 	
-	//	TODO: Fix following bug
-	//	--NNNNN--
-	//	--01234--
-	//	W0XXOXX0E
-	//	W1XO.OX1E
-	//	W2XX#OX2E
-	//	W3OOXXO3E
-	//	W4XXOOX4E
-	//	--01234--
-	//	--SSSSS--
-	//	Player 1: enter move [side/position]:
-	
     //Check which side the piece is being added
     //Check if peice will move vertical and which
     //index it will start from
@@ -237,27 +227,13 @@ void AddMoveToBoard(int board[MAX_SIZE][MAX_SIZE], int size, char side, int move
 
 int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, int col)
 {
-
-//	TODO: Fix following bug
-//	--NNNNN--
-//	--01234--
-//	W0XXOXX0E
-//	W1XO.OX1E
-//	W2XX#OX2E
-//	W3OOXXO3E
-//	W4XXOOX4E
-//	--01234--
-//	--SSSSS--
-//	Player 1: enter move [side/position]:
 	
 	//Check who made last move to fill board
     int zeroCount;
     zeroCount = 0;
     for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            if (board[i][j] == 0)
-                zeroCount++;
-        }
+        if (board[i][0] == 0 || board[0][i] == 0 || board[size-1][i] == 0 || board[i][size-1] == 0)
+			zeroCount++;
     }
     
     if (zeroCount == 0) {
@@ -546,4 +522,60 @@ int Power(int num, int exp)
 	}
 	
 	return num;
+}
+
+void LookForWinningMove(int board[MAX_SIZE][MAX_SIZE], int size, char *dir, int *move)
+{
+	//Search for any 3 in a row of opponent or current player and then add to it to block or win
+	
+	//Check if current position is player token, find if it is 3 in a row
+	
+	int isThreeInARow;
+	int coordinates[2][2] = {0};
+	isThreeInARow = 0;
+	
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			if (board[i][j] == 1 || board[i][j] == 2) {
+				int n = board[i][j];
+				if (i > size-3 && board[i+1][j] == n && board[i+2][j] == n) {
+					isThreeInARow = 1;
+					if (i == 0) {
+						coordinates[0][0] = -1; coordinates[0][1] = -1;
+					} else {
+						coordinates[0][0] = i-1; coordinates[0][1] = j;
+					}
+					
+					coordinates[1][0] = i+3; coordinates[1][1] = j;
+				} else if (j > size-3 && board[i][j+1] == n && board[i][j+2] == n) {
+					isThreeInARow = 1;
+					if (i == 0) {
+						coordinates[0][0] = -1; coordinates[0][1] = -1;
+					} else {
+						coordinates[0][0] = i; coordinates[0][1] = j-1;
+					}
+					
+					coordinates[1][0] = i; coordinates[1][1] = j+3;
+				} //TODO: Add diagonals
+			}
+		}
+	}
+	
+	//Check if there is another token blocking the 3 in a row. If not use the first clear path found
+	if (checkForFreeSpace(board, coordinates, size, dir, move)) {
+		//Do nothing
+	} else {
+		//If no moves are available
+		*dir = 'Z'; *move = -1;
+	}
+	
+}
+
+int checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2],int size , char *dir, int *move) {
+	//Check for both coordinates
+	for (int i = 0; i < 2; i++){
+		//Check above
+		
+	}
+	return 0;
 }
