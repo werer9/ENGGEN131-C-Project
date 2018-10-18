@@ -324,6 +324,7 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 	isClear = 0;
 	while (!isClear) {
 		switch(*side) {
+			//If side == N, etc.
 			case 'N':
 				if (board[0][*move] != 0) {
 					PickRandomSide(side, move, size);
@@ -363,13 +364,100 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 	}
 	
 	//Make a winning move
-//	for (int i = 1; i < size-2; i++) {
-//		for (int j = 1; j < size-2; j++) {
-//			for (int k = 1; k < 3; k++) {
-//				int row[4];
-//			}
-//		}
-//	}
+	for (int i = 1; i < size-1; i++) {
+		for (int j = 1; j < size-1; j++) {
+			if (board[i][j] == 1 || board[i][j] == 2 || board[i][j] == player) {
+				int current = board[i][j];
+				//Boolean to check if either end of three in a row touches front (i,j = 0) or back edges
+				int isFrontEdges, isBackEdges;
+				isFrontEdges = 0; isBackEdges = 0;
+				char oldSide = *side; int oldMove = *move;
+				if (board[i+1][j] == current && board[i-1][j] == current) {//Vertical 3 in a row
+					//Check if touching any edges
+					printf("Vertical 3 in a row\n");
+					if (i+1 == size-1) {
+						isBackEdges = 1;
+					} else if (i-1 == 0) {
+						isFrontEdges = 1;
+					}
+					
+					//Determine where a winning move can be made if possible
+					if (isBackEdges && isFrontEdges) {/*Do nothing*/}
+					else if (isBackEdges) {
+						GetWinningMove(board, i+2, j, size, side, move);
+					} else if (isFrontEdges) {
+						GetWinningMove(board, i-2, j, size, side, move);
+					} else {
+						GetWinningMove(board, i+2, j, size, side, move);
+						GetWinningMove(board, i-2, j, size, side, move);
+					}
+					
+					//Complete function if side and move have changed
+					if (oldSide != *side || oldMove != *move)
+						return;
+					
+					isFrontEdges = 0; isBackEdges = 0;
+				}
+				if (board[i][j+1] == current && board[i][j-1] == current) {//Horizontal 3 in a row
+					printf("Horizontal 3 in a row\n");
+					if (j+1 == size-1) {
+						isBackEdges = 1;
+					} else if (j-1 == 0) {
+						isFrontEdges = 1;
+					}
+					
+					if (isBackEdges && isFrontEdges) {/*Do nothing*/}
+					else if (isBackEdges) {
+						GetWinningMove(board, i, j+2, size, side, move);
+					} else if (isFrontEdges) {
+						GetWinningMove(board, i, j-2, size, side, move);
+					} else {
+						GetWinningMove(board, i, j+2, size, side, move);
+						GetWinningMove(board, i, j-2, size, side, move);
+					}
+					
+					if (oldSide != *side || oldMove != *move)
+						return;
+					
+					isFrontEdges = 0; isBackEdges = 0;
+				}
+				if (board[i+1][j+1] == current && board[i-1][j-1] == current) {//Diagonal 3 in a row
+					
+					if (isBackEdges && isFrontEdges) {/*Do nothing*/}
+					else if (isBackEdges) {
+						GetWinningMove(board, i+2, j, size, side, move);
+					} else if (isFrontEdges) {
+						GetWinningMove(board, i-2, j, size, side, move);
+					} else {
+						GetWinningMove(board, i+2, j, size, side, move);
+						GetWinningMove(board, i-2, j, size, side, move);
+					}
+					
+					if (oldSide != *side || oldMove != *move)
+						return;
+					
+					isFrontEdges = 0; isBackEdges = 0;
+				}
+				if (board[i+1][j-1] == current && board[i-1][j+1] == current) {//Diagonal 3 in a row
+					
+					if (isBackEdges && isFrontEdges) {/*Do nothing*/}
+					else if (isBackEdges) {
+						GetWinningMove(board, i+2, j, size, side, move);
+					} else if (isFrontEdges) {
+						GetWinningMove(board, i-2, j, size, side, move);
+					} else {
+						GetWinningMove(board, i+2, j, size, side, move);
+						GetWinningMove(board, i-2, j, size, side, move);
+					}
+					
+					if (oldSide != *side || oldMove != *move)
+						return;
+					
+					isFrontEdges = 0; isBackEdges = 0;
+				}
+			}
+		}
+	}
 }
 
 void GetMoveBot2(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move)
@@ -462,6 +550,7 @@ void PickRandomSide(char *side, int *move, int size)
 	
 		//Choose a random side
 		switch ((rand() % 4) + 1) {
+			//if rand number == 1 side = N, etc.
 			case 1:
 				*side = 'N';
 				break;
@@ -524,9 +613,13 @@ void ConstructBorder(int size, char *boardString) {
 	boardString[count] = '\0';
 }
 
-
+//TODO: Check token will also stop at position...
 //Find if there is a pathway for a piece to a certain position
 void GetWinningMove(int board[MAX_SIZE][MAX_SIZE], int i, int j, int size ,char *side, int *move) {
+	//Check if position is available
+	if (board[i][j] != 0) //Position is not available
+		return;
+	
 	int nonZero = 0;
 	for (int k = i; k < size; k++) { //Check down is clear
 		if (board[k][j] != 0) {
@@ -538,6 +631,7 @@ void GetWinningMove(int board[MAX_SIZE][MAX_SIZE], int i, int j, int size ,char 
 	if (nonZero == 0) {
 		*side = 'S';
 		*move = j;
+		printf("Making Winning Move %c %d\n", *side, *move);
 		return;
 	} else {
 		nonZero = 0;
@@ -553,6 +647,7 @@ void GetWinningMove(int board[MAX_SIZE][MAX_SIZE], int i, int j, int size ,char 
 	if (nonZero == 0) {
 		*side = 'N';
 		*move = j;
+		printf("Making Winning Move %c %d\n", *side, *move);
 		return;
 	} else {
 		nonZero = 0;
@@ -568,6 +663,7 @@ void GetWinningMove(int board[MAX_SIZE][MAX_SIZE], int i, int j, int size ,char 
 	if (nonZero == 0) {
 		*side = 'W';
 		*move = i;
+		printf("Making Winning Move %c %d\n", *side, *move);
 		return;
 	} else {
 		nonZero = 0;
@@ -583,6 +679,7 @@ void GetWinningMove(int board[MAX_SIZE][MAX_SIZE], int i, int j, int size ,char 
 	if (nonZero == 0) {
 		*side = 'E';
 		*move = i;
+		printf("Making Winning Move %c %d\n", *side, *move);
 		return;
 	} else {
 		nonZero = 0;
