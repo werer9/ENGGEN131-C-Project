@@ -218,7 +218,25 @@ void MyTestFunction(void)
 	printf("   If you then play a tournament, of many games, between the two bots, you \n");
 	printf("   can see which one is performing the best.  This might help you to refine \n");
 	printf("   the strategies that you are using. \n");
-
+	
+	printf("\nTESTING GetWinningMove:\n");
+	printf("====================\n");
+	int board10[MAX_SIZE][MAX_SIZE];
+	int size10 = 8;
+	char boardString10[250];
+	InitialiseBoard(board10, size10);
+	AddMoveToBoard(board10, size10, 'W', 4, 1, &rowPos, &colPos);
+	AddMoveToBoard(board10, size10, 'W', 4, 2, &rowPos, &colPos);
+	AddMoveToBoard(board10, size10, 'W', 4, 1, &rowPos, &colPos);
+	AddMoveToBoard(board10, size10, 'S', 0, 2, &rowPos, &colPos);
+	AddMoveToBoard(board10, size10, 'S', 0, 1, &rowPos, &colPos);
+	AddMoveToBoard(board10, size10, 'E', 7, 1, &rowPos, &colPos);
+	AddMoveToBoard(board10, size10, 'E', 7, 2, &rowPos, &colPos);
+	GetDisplayBoardString(board10, size10, boardString10);
+	printf("%s", boardString10);
+	char side = 'Z'; int move = 99;
+	GetWinningMove(board10, 6, 1, size10, &side, &move);
+	printf("%c %d\n", side, move);
 }
 
 /*********************************************************************************/

@@ -559,7 +559,7 @@ void GetWinningMove(int board[MAX_SIZE][MAX_SIZE], int i, int j, int size ,char 
 	}
 	
 	for (int k = j; k >= 0; k--) { //Check left is clear
-		if (board[k][j] != 0) {
+		if (board[i][k] != 0) {
 			nonZero++;
 			break;
 		}
