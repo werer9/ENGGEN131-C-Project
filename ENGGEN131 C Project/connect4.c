@@ -9,7 +9,6 @@
  */
 
 //Helper function prototypes
-void GetIdealMove(int board[MAX_SIZE][MAX_SIZE], char *side, int *move, int i, int j);
 void Swap(int *values, int i, int j);
 void Bubble(int *values, int length);
 void Sort(int *values, int length);
@@ -17,6 +16,7 @@ void SwapDouble(double *values, int i, int j);
 void BubbleDouble(double *values, int length);
 void SortDouble(double *values, int length);
 int Power(int num, int exp);
+void PickRandomSide(char *side, int *move, int size);
 
 
 int SecondPlacePrize(int prize1, int prize2, int prize3)
@@ -348,58 +348,61 @@ void GetDisplayBoardString(int board[MAX_SIZE][MAX_SIZE], int size, char *boardS
 
 void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move)
 {
-//    time_t t;
-//    srand((unsigned) time(&t));
-//    int row, col;
-//	row = 0; col = 0;
-//
-//	switch ((rand() % 4) + 1) {
-//		case 1:
-//			*side = 'N';
-//			break;
-//		case 2:
-//			*side = 'E';
-//			break;
-//		case 3:
-//			*side = 'S';
-//			break;
-//		case 4:
-//			*side = 'W';
-//			break;
-//		default:
-//			*side = 'N';
-//			break;
-//	}
-//
-//	*move = rand() % size;
-//
-//	LookForWinningMove(board, size, side, move);
-//
+	time_t t;
+	srand((unsigned) time(&t));
+	int isClear;
 	
+	//Pick a random side if it is not already taken
+	PickRandomSide(side, move, size);
+	isClear = 0;
+	while (!isClear) {
+		switch(*side) {
+			case 'N':
+				if (board[0][*move] != 0) {
+					PickRandomSide(side, move, size);
+					isClear = 0;
+				} else {
+					isClear = 1;
+				}
+				break;
+			case 'E':
+				if (board[*move][size-1] != 0) {
+					PickRandomSide(side, move, size);
+					isClear = 0;
+				} else {
+					isClear = 1;
+				}
+				break;
+			case 'S':
+				if (board[size-1][*move] != 0) {
+					PickRandomSide(side, move, size);
+					isClear = 0;
+				} else {
+					isClear = 1;
+				}
+				break;
+			case 'W':
+				if (board[*move][0] != 0) {
+					PickRandomSide(side, move, size);
+					isClear = 0;
+				} else {
+					isClear = 1;
+				}
+				break;
+			default:
+				isClear = 1;
+				break;
+		}
+	}
+	
+	//Make a winning move
 	
 }
 
 void GetMoveBot2(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move)
 {
-	
-}
-
-void GetIdealMove(int board[MAX_SIZE][MAX_SIZE], char *side, int *move, int i, int j) {
-	if (i > 0) {
-		for (; i <= 0; i--) {
-			if (board[i][j] == 0) {
-				*side = 'N';
-				*move = j;
-			}
-		}
-	} else if (j > 0) {
-		for (; j <= 0; j--) {
-			if (board[i][j] == 0) {
-				*side = 'W';
-				*move = i;
-			}
-		}
-	}
+	//Do the same thing as move bot 1
+	GetMoveBot1(board, size, player, side, move);
 }
 
 //Swap array element i and j around
@@ -478,4 +481,28 @@ int Power(int num, int exp)
 	}
 	
 	return num;
+}
+
+void PickRandomSide(char *side, int *move, int size)
+{
+	
+		switch ((rand() % 4) + 1) {
+			case 1:
+				*side = 'N';
+				break;
+			case 2:
+				*side = 'E';
+				break;
+			case 3:
+				*side = 'S';
+				break;
+			case 4:
+				*side = 'W';
+				break;
+			default:
+				*side = 'N';
+				break;
+		}
+	
+		*move = rand() % size;
 }
