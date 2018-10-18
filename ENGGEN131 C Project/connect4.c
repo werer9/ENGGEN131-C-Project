@@ -248,14 +248,14 @@ int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, 
         for (int j = 0; j < size; j++) {
             if (board[i][j] == player) {
                 //Check vertical 4 in a row
-                if (i < size-2) {
+                if (i < size-3) {
                     if (board[i+1][j] == player && board[i+2][j] == player
                         && board[i+3][j] == player
                         && (i <= row <= i+3) && col == j)
                         return player;
                 }
                 //Check horizontal 4 in a row
-                if (j < size-2) {
+                if (j < size-3) {
                     if (board[i][j+1] == player && board[i][j+2] == player
                         && board[i][j+3] == player
                         && (j <= col <= j+3) && row == i)
@@ -364,16 +364,34 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 	}
 	
 	//Make a winning move
-	//TODO: Make sure it checks every possible position...
-	for (int i = 1; i < size-1; i++) {
-		for (int j = 1; j < size-1; j++) {
+	//TODO: Bugfixes
+//	Horizontal 3 in a row
+//	Diagonal 3 in a row
+//	Making Winning Move S 6
+//	Making Winning Move E 1
+//	--NNNNNNNNNN--
+//	--0123456789--
+//	W0.........X0E
+//	W1.........O1E
+//	W2........OX2E
+//	W3......OXXX3E
+//	W4....##OXXX4E
+//	W5O...##...O5E
+//	W6O....X....6E
+//	W7X.........7E
+//	W8X.O.......8E
+//	W9X.OO......9E
+//	--0123456789--
+//	--SSSSSSSSSS--
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
 			if (board[i][j] == 1 || board[i][j] == 2 || board[i][j] == player) {
 				int current = board[i][j];
 				//Boolean to check if either end of three in a row touches front (i,j = 0) or back edges
 				int isFrontEdges, isBackEdges;
 				isFrontEdges = 0; isBackEdges = 0;
 				char oldSide = *side; int oldMove = *move;
-				if (board[i+1][j] == current && board[i-1][j] == current) {//Vertical 3 in a row
+				if (board[i+1][j] == current && board[i-1][j] == current && size-1 > i > 0) {//Vertical 3 in a row
 					//Check if touching any edges
 					printf("Vertical 3 in a row\n");
 					if (i+1 == size-1) {
@@ -399,7 +417,7 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 					
 					isFrontEdges = 0; isBackEdges = 0;
 				}
-				if (board[i][j+1] == current && board[i][j-1] == current) {//Horizontal 3 in a row
+				if (board[i][j+1] == current && board[i][j-1] == current && 0 < j < size-1) {//Horizontal 3 in a row
 					printf("Horizontal 3 in a row\n");
 					if (j+1 == size-1) {
 						isBackEdges = 1;
@@ -422,7 +440,7 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 					
 					isFrontEdges = 0; isBackEdges = 0;
 				}
-				if (board[i+1][j+1] == current && board[i-1][j-1] == current) {//Diagonal 3 in a row
+				if (board[i+1][j+1] == current && board[i-1][j-1] == current && 0 < j < size-1 && size-1 > i > 0) {//Diagonal 3 in a row
 					
 					printf("Diagonal 3 in a row\n");
 					if (j+1 == size-1 || i+1 == size-1) {
@@ -446,7 +464,7 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 					
 					isFrontEdges = 0; isBackEdges = 0;
 				}
-				if (board[i+1][j-1] == current && board[i-1][j+1] == current) {//Diagonal 3 in a row
+				if (board[i+1][j-1] == current && board[i-1][j+1] == current && 0 < j < size-1 && size-1 > i > 0) {//Diagonal 3 in a row
 					
 					printf("Diagonal 3 in a row\n");
 					if (j-1 == size-1 || i+1 == size-1) {
