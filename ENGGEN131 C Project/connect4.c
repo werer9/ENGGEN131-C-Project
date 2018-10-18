@@ -360,73 +360,13 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 	}
 	
 	//Make a winning move
-	for (int i = 1; i < size-1; i++) {
-		for (int j = 1; j < size-1; j++) {
-			//If the piece is a player piece
-			if (board[i][j] == 1 || board[i][j] == 2) {
-				int piece = board[i][j];
-				//Touching edge closest zero = front
-				int isFront = 0; int isBack = 0;
-				//Check if the 3 in a row area is touching any edges
-				if (i-1 == 0 || j-1 == 0) {
-					isFront = 1;
-				}
-				
-				if (i+1 == size-1 || j+1 == size-1) {
-					isBack = 1;
-				}
-				
-				//Vertical
-				if (board[i-1][j] == piece && board[i+1][j] == piece) {
-					if (isBack && isFront) {
-					} else if (isFront) {
-						GetWinningMove(board, i+2, j, size, side, move);
-					} else if (isBack) {
-						GetWinningMove(board, i-2, j, size, side, move);
-					} else {
-						GetWinningMove(board, i+2, j, size, side, move);
-						GetWinningMove(board, i-2, j, size, side, move);
-					}
-				}
-				
-				if (board[i][j-1] == piece && board[i][j+1] == piece) { //Horizontal
-					if (isBack && isFront) {
-					} else if (isFront) {
-						GetWinningMove(board, i, j+2, size, side, move);
-					} else if (isBack) {
-						GetWinningMove(board, i, j-2, size, side, move);
-					} else {
-						GetWinningMove(board, i, j+2, size, side, move);
-						GetWinningMove(board, i, j-2, size, side, move);
-					}
-				}
-				
-				if (board[i-1][j-1] == piece && board[i+1][j+1] == piece) { //Diagonal 1
-					if (isBack && isFront) {
-					} else if (isFront) {
-						GetWinningMove(board, i+2, j+2, size, side, move);
-					} else if (isBack) {
-						GetWinningMove(board, i-2, j-2, size, side, move);
-					} else {
-						GetWinningMove(board, i+2, j+2, size, side, move);
-						GetWinningMove(board, i-2, j-2, size, side, move);
-					}
-				}
-				
-				if (board[i-1][j+1] == piece && board[i+1][j-1] == piece) { //Diagonal 2
-					if (isBack && isFront) {
-					} else if (isFront) {
-						GetWinningMove(board, i-2, j+2, size, side, move);
-					} else if (isBack) {
-						GetWinningMove(board, i+2, j-2, size, side, move);
-					} else {
-						GetWinningMove(board, i-2, j+2, size, side, move);
-						GetWinningMove(board, i+2, j-2, size, side, move);
-					}
-				}
-			}
-		}
-	}
+//	for (int i = 1; i < size-2; i++) {
+//		for (int j = 1; j < size-2; j++) {
+//			for (int k = 1; k < 3; k++) {
+//				int row[4];
+//			}
+//		}
+//	}
 }
 
 void GetMoveBot2(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move)
