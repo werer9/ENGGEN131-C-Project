@@ -17,8 +17,6 @@ void SwapDouble(double *values, int i, int j);
 void BubbleDouble(double *values, int length);
 void SortDouble(double *values, int length);
 int Power(int num, int exp);
-void LookForWinningMove(int board[MAX_SIZE][MAX_SIZE], int size , char *dir, int *move);
-void checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2], int size , char *dir, int *move);
 
 
 int SecondPlacePrize(int prize1, int prize2, int prize3)
@@ -239,7 +237,7 @@ int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, 
     
     //Check 4 in a row in any direction and check this is part of row and col
     //Coordinates passed in as function parameter
-    
+	
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             if (board[i][j] == player) {
@@ -350,72 +348,40 @@ void GetDisplayBoardString(int board[MAX_SIZE][MAX_SIZE], int size, char *boardS
 
 void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move)
 {
-    time_t t;
-    srand((unsigned) time(&t));
-    int row, col;
-	row = 0; col = 0;
+//    time_t t;
+//    srand((unsigned) time(&t));
+//    int row, col;
+//	row = 0; col = 0;
+//
+//	switch ((rand() % 4) + 1) {
+//		case 1:
+//			*side = 'N';
+//			break;
+//		case 2:
+//			*side = 'E';
+//			break;
+//		case 3:
+//			*side = 'S';
+//			break;
+//		case 4:
+//			*side = 'W';
+//			break;
+//		default:
+//			*side = 'N';
+//			break;
+//	}
+//
+//	*move = rand() % size;
+//
+//	LookForWinningMove(board, size, side, move);
+//
 	
-	switch ((rand() % 4) + 1) {
-		case 1:
-			*side = 'N';
-			break;
-		case 2:
-			*side = 'E';
-			break;
-		case 3:
-			*side = 'S';
-			break;
-		case 4:
-			*side = 'W';
-			break;
-		default:
-			*side = 'N';
-			break;
-	}
-	
-	*move = rand() % size;
-	
-	LookForWinningMove(board, size, side, move);
 	
 }
 
 void GetMoveBot2(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move)
 {
-	time_t t;
-	srand((unsigned) time(&t));
-	int row, col;
-	row = 0; col = 0;
 	
-//	for (int i = 0; i < size; i++) {
-//		for (int j = 0; j < size; j++) {
-//			if (board[i][j] == player) {
-//				GetIdealMove(board, side, move, i, j);
-//				return;
-//			}
-//		}
-//	}
-	
-	switch ((rand() % 4) + 1) {
-		case 1:
-			*side = 'N';
-			break;
-		case 2:
-			*side = 'E';
-			break;
-		case 3:
-			*side = 'S';
-			break;
-		case 4:
-			*side = 'W';
-			break;
-		default:
-			*side = 'N';
-			break;
-	}
-	
-	*move = rand() % size;
-	
-	LookForWinningMove(board, size, side, move);
 }
 
 void GetIdealMove(int board[MAX_SIZE][MAX_SIZE], char *side, int *move, int i, int j) {
@@ -512,116 +478,4 @@ int Power(int num, int exp)
 	}
 	
 	return num;
-}
-
-void LookForWinningMove(int board[MAX_SIZE][MAX_SIZE], int size, char *dir, int *move)
-{
-	//Search for any 3 in a row of opponent or current player and then add to it to block or win
-	
-	//Check if current position is player token, find if it is 3 in a row
-	
-	int isThreeInARow;
-	int coordinates[2][2] = {0};
-	isThreeInARow = 0;
-	
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < size; j++) {
-			if (board[i][j] == 1 || board[i][j] == 2) {
-				int n = board[i][j];
-				if (i > size-3 && board[i+1][j] == n && board[i+2][j] == n) {
-					isThreeInARow = 1;
-					if (i == 0) {
-						coordinates[0][0] = -1; coordinates[0][1] = -1;
-					} else {
-						coordinates[0][0] = i-1; coordinates[0][1] = j;
-					}
-					
-					coordinates[1][0] = i+3; coordinates[1][1] = j;
-				} else if (j > size-3 && board[i][j+1] == n && board[i][j+2] == n) {
-					isThreeInARow = 1;
-					if (i == 0) {
-						coordinates[0][0] = -1; coordinates[0][1] = -1;
-					} else {
-						coordinates[0][0] = i; coordinates[0][1] = j-1;
-					}
-					
-					coordinates[1][0] = i; coordinates[1][1] = j+3;
-				} else {
-					return;
-				} //TODO: Add diagonals
-			}
-		}
-	}
-	
-	//Check if there is another token blocking the 3 in a row. If not use the first clear path found
-	checkForFreeSpace(board, coordinates, size, dir, move);
-	
-}
-
-void checkForFreeSpace(int board[MAX_SIZE][MAX_SIZE], int coordinates[2][2],int size , char *dir, int *move) {
-	//Check for both coordinates
-	int i;
-	//Check first coordinates are not at start of board
-	if (coordinates[0][0] == -1)
-		i = 1;
-	else
-		i = 0;
-	for (; i < 2; i++){
-		//Check below
-		int notZeroCount;
-		notZeroCount = 0;
-		for (int j = coordinates[i][0]; j < size; j++) {
-			if (board[j][coordinates[i][1]] != 0)
-				notZeroCount++;
-		}
-		
-		if (notZeroCount == 0) {
-			*dir = 'S';
-			*move = coordinates[i][1];
-			return;
-		}
-		
-		notZeroCount = 0;
-		
-		//Check above
-		for (int j = coordinates[i][0]; j >= 0; j--) {
-			if (board[j][coordinates[i][1]] != 0)
-				notZeroCount++;
-		}
-		
-		if (notZeroCount == 0) {
-			*dir = 'N';
-			*move = coordinates[i][1];
-			return;
-		}
-		
-		notZeroCount = 0;
-		
-		//Check right
-		for (int j = coordinates[i][1]; j < size; j++) {
-			if (board[coordinates[i][0]][j] != 0)
-				notZeroCount++;
-		}
-		
-		if (notZeroCount == 0) {
-			*dir = 'E';
-			*move = coordinates[i][0];
-			return;
-		}
-		
-		notZeroCount = 0;
-		
-		//Check left
-		for (int j = coordinates[i][1]; j >= 0; j--) {
-			if (board[coordinates[i][0]][j] != 0)
-				notZeroCount++;
-		}
-		
-		if (notZeroCount == 0) {
-			*dir = 'W';
-			*move = coordinates[i][0];
-			return;
-		}
-		
-	}
 }
