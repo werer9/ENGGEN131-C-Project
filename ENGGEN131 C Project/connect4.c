@@ -24,7 +24,10 @@ void GetWinningMove(int board[MAX_SIZE][MAX_SIZE], int i, int j, int size, char 
 int SecondPlacePrize(int prize1, int prize2, int prize3)
 {
     //Put prizes into array
-    int values[] = {prize1, prize2, prize3};
+    int values[3];
+	values[0] = prize1;
+    values[1] = prize2;
+	values[2] =	prize3;
     //Arrange prizes from large to small
     Sort(values, 3);
     //Return value of middle element in array (2nd place)
@@ -498,16 +501,16 @@ void ConstructBorder(int size, char *boardString) {
 				if (j < 2 || j > size + 1) {
 					boardString[count] = '-';
 				} else {
-					boardString[count] = '0' + (j - 2);
+					boardString[count] = (char)('0' + (j - 2));
 				}
 			} else {
 				if (j == 0) { //West side
 					boardString[count] = 'W';
-					boardString[count + 1] = '0' + (i - 2);
+					boardString[count + 1] = (char)('0' + (i - 2));
 					count++;
 					j++;
 				} else if (j == size + 2) { // East side
-					boardString[count] = '0' + (i - 2);
+					boardString[count] = (char)('0' + (i - 2));
 					boardString[count + 1] = 'E';
 					count++;
 					j++;
