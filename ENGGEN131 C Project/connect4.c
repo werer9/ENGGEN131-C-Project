@@ -78,9 +78,11 @@ int BinaryToDecimal(int binary)
 double MedianAbility(double abilities[], int length)
 {
     double median;
-    
+	
+	//Arrange abilities into order
     SortDouble(abilities, length);
-    
+	
+	//Select the median ability based of whether it is an even or odd length array
     if (length % 2 == 0) {
         median = (abilities[length/2 - 1] + abilities[length/2])/2;
     } else {
