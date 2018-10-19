@@ -120,7 +120,6 @@ void InitialiseBoard(int board[MAX_SIZE][MAX_SIZE], int size)
 {
 	//Do nothing is size is bigger than 10
 	if (size > MAX_SIZE || size < 4) {
-        printf("Error, size must be between 4 and 10 inclusive!");
         return;
     }
 	
@@ -167,7 +166,6 @@ void AddMoveToBoard(int board[MAX_SIZE][MAX_SIZE], int size, char side, int move
             i = size-1;
             break;
         default:
-            printf("Error, invalid direction!");
             return;
     }
     
