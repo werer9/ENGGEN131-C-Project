@@ -406,7 +406,6 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 			if (CheckGameOver(boardCopy, size, player, row, col) == player) {
 				*side = sideChosen;
 				*move = i;
-				printf("Winning Move for player %c %d\n", *side, *move);
 				return;
 			} else { //Otherwise, see if if the other player will win
 				CopyBoard(board, boardCopy); //Reset the copy of the board
@@ -415,7 +414,6 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 				if (CheckGameOver(boardCopy, size, 3-player, row, col) == 3-player) {
 					*side = sideChosen;
 					*move = i;
-					printf("Blocking opposition %c %d\n", *side, *move);
 					return; //Place token where player can win
 				}
 			}
