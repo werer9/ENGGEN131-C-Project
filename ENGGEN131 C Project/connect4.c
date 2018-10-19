@@ -18,7 +18,7 @@ void SortDouble(double *values, int length);
 int Power(int num, int exp);
 void PickRandomSide(char *side, int *move, int size);
 void ConstructBorder(int size, char *boardString);
-void GetWinningMove(int board[MAX_SIZE][MAX_SIZE], int i, int j, int size, char *side, int *move);
+void CopyBoard(int board1[MAX_SIZE][MAX_SIZE], int board2[MAX_SIZE][MAX_SIZE]);
 
 
 int SecondPlacePrize(int prize1, int prize2, int prize3)
@@ -293,10 +293,15 @@ int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, 
 
 void GetDisplayBoardString(int board[MAX_SIZE][MAX_SIZE], int size, char *boardString)
 {
-    ConstructBorder(size, boardString);
-    
+	//Call construct border function
+	ConstructBorder(size, boardString);
+	
+	//Manage string indices
     int count;
+	//Start at the first empty part of the string
     count = (size+5)*2 + 2;
+	//For each position in the board without a -1
+	//Use the value to determine which symbol is inserted into the string
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             if (board[i][j] == 3){
@@ -306,31 +311,33 @@ void GetDisplayBoardString(int board[MAX_SIZE][MAX_SIZE], int size, char *boardS
             } else if (board[i][j] == 2) {
                 boardString[count] = 'O';
             }
-            count++;
+            count++; //Move to next column
         }
-        count += 5;
+        count += 5; //Next row
     }
 }
 
 void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move)
 {
+	char sideChosen;
+	int boardCopy[MAX_SIZE][MAX_SIZE] = {-1};
+	int col, row, isClear;
 	time_t t;
 	srand((unsigned) time(&t));
-	int isClear;
-	
-	
+	CopyBoard(board, boardCopy);
+		
 	//Pick a random side and move if it is not already taken
 	PickRandomSide(side, move, size);
 	isClear = 0;
-	while (!isClear) {
+	while (!isClear) { //Loop to check if move is valid
 		switch(*side) {
-			//If side == N, etc.
+				//If side == N, etc.
 			case 'N':
 				if (board[0][*move] != 0) {
-					PickRandomSide(side, move, size);
-					isClear = 0;
+					PickRandomSide(side, move, size); //Pick random side and move
+					isClear = 0; //Keep looping
 				} else {
-					isClear = 1;
+					isClear = 1; //Break loop
 				}
 				break;
 			case 'E':
@@ -363,132 +370,55 @@ void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side
 		}
 	}
 	
-	//Make a winning move
-	//TODO: Bugfixes
-//	Horizontal 3 in a row
-//	Diagonal 3 in a row
-//	Making Winning Move S 6
-//	Making Winning Move E 1
-//	--NNNNNNNNNN--
-//	--0123456789--
-//	W0.........X0E
-//	W1.........O1E
-//	W2........OX2E
-//	W3......OXXX3E
-//	W4....##OXXX4E
-//	W5O...##...O5E
-//	W6O....X....6E
-//	W7X.........7E
-//	W8X.O.......8E
-//	W9X.OO......9E
-//	--0123456789--
-//	--SSSSSSSSSS--
-	for (int i = 0; i < size; i++) {
-		for (int j = 0; j < size; j++) {
-			if (board[i][j] == 1 || board[i][j] == 2 || board[i][j] == player) {
-				int current = board[i][j];
-				//Boolean to check if either end of three in a row touches front (i,j = 0) or back edges
-				int isFrontEdges, isBackEdges;
-				isFrontEdges = 0; isBackEdges = 0;
-				char oldSide = *side; int oldMove = *move;
-				if (board[i+1][j] == current && board[i-1][j] == current && size-1 > i > 0) {//Vertical 3 in a row
-					//Check if touching any edges
-					printf("Vertical 3 in a row\n");
-					if (i+1 == size-1) {
-						isBackEdges = 1;
-					} else if (i-1 == 0) {
-						isFrontEdges = 1;
-					}
-					
-					//Determine where a winning move can be made if possible
-					if (isBackEdges && isFrontEdges) {/*Do nothing*/}
-					else if (isBackEdges) {
-						GetWinningMove(board, i-2, j, size, side, move);
-					} else if (isFrontEdges) {
-						GetWinningMove(board, i+2, j, size, side, move);
-					} else {
-						GetWinningMove(board, i+2, j, size, side, move);
-						GetWinningMove(board, i-2, j, size, side, move);
-					}
-					
-					//Complete function if side and move have changed
-					if (oldSide != *side || oldMove != *move)
-						return;
-					
-					isFrontEdges = 0; isBackEdges = 0;
-				}
-				if (board[i][j+1] == current && board[i][j-1] == current && 0 < j < size-1) {//Horizontal 3 in a row
-					printf("Horizontal 3 in a row\n");
-					if (j+1 == size-1) {
-						isBackEdges = 1;
-					} else if (j-1 == 0) {
-						isFrontEdges = 1;
-					}
-					
-					if (isBackEdges && isFrontEdges) {/*Do nothing*/}
-					else if (isBackEdges) {
-						GetWinningMove(board, i, j-2, size, side, move);
-					} else if (isFrontEdges) {
-						GetWinningMove(board, i, j+2, size, side, move);
-					} else {
-						GetWinningMove(board, i, j+2, size, side, move);
-						GetWinningMove(board, i, j-2, size, side, move);
-					}
-					
-					if (oldSide != *side || oldMove != *move)
-						return;
-					
-					isFrontEdges = 0; isBackEdges = 0;
-				}
-				if (board[i+1][j+1] == current && board[i-1][j-1] == current && 0 < j < size-1 && size-1 > i > 0) {//Diagonal 3 in a row
-					
-					printf("Diagonal 3 in a row\n");
-					if (j+1 == size-1 || i+1 == size-1) {
-						isBackEdges = 1;
-					} else if (j-1 == 0 || i-1 == 0) {
-						isFrontEdges = 1;
-					}
-					
-					if (isBackEdges && isFrontEdges) {/*Do nothing*/}
-					else if (isBackEdges) {
-						GetWinningMove(board, i-2, j-2, size, side, move);
-					} else if (isFrontEdges) {
-						GetWinningMove(board, i+2, j+2, size, side, move);
-					} else {
-						GetWinningMove(board, i+2, j+2, size, side, move);
-						GetWinningMove(board, i-2, j-2, size, side, move);
-					}
-					
-					if (oldSide != *side || oldMove != *move)
-						return;
-					
-					isFrontEdges = 0; isBackEdges = 0;
-				}
-				if (board[i+1][j-1] == current && board[i-1][j+1] == current && 0 < j < size-1 && size-1 > i > 0) {//Diagonal 3 in a row
-					
-					printf("Diagonal 3 in a row\n");
-					if (j-1 == size-1 || i+1 == size-1) {
-						isBackEdges = 1;
-					} else if (j+1 == 0 || i-1 == 0) {
-						isFrontEdges = 1;
-					}
-					
-					if (isBackEdges && isFrontEdges) {/*Do nothing*/}
-					else if (isBackEdges) {
-						GetWinningMove(board, i-2, j+2, size, side, move);
-					} else if (isFrontEdges) {
-						GetWinningMove(board, i+2, j-2, size, side, move);
-					} else {
-						GetWinningMove(board, i+2, j-2, size, side, move);
-						GetWinningMove(board, i-2, j+2, size, side, move);
-					}
-					
-					if (oldSide != *side || oldMove != *move)
-						return;
-					
-					isFrontEdges = 0; isBackEdges = 0;
+	//Check if bot can make winning move or block one
+	//Iterate to 4 for each side of board
+	//Will not update move or side if it does not find a winning or
+	//blocking move
+	for (int k = 0; k < 4; k++) {
+		//Find the side to use
+		//0 = N, 1 = E, etc...
+		switch (k) {
+			case 0:
+				sideChosen = 'N';
+				break;
+			case 1:
+				sideChosen = 'E';
+				break;
+			case 2:
+				sideChosen = 'S';
+				break;
+			case 3:
+				sideChosen = 'W';
+				break;
+			default:
+				sideChosen = 'N';
+				break;
+		}
+		
+		//Iterate for every move, 0 to size-1
+		for (int i = 0; i < size; i++) {
+			//Add bots token to copy of board
+			AddMoveToBoard(boardCopy, size, sideChosen, i, player, &row, &col);
+			
+			//If this is a winning move return the move
+			if (CheckGameOver(boardCopy, size, player, row, col) == player) {
+				*side = sideChosen;
+				*move = i;
+				printf("Winning Move for player %c %d\n", *side, *move);
+				return;
+			} else { //Otherwise, see if if the other player will win
+				CopyBoard(board, boardCopy); //Reset the copy of the board
+				
+				AddMoveToBoard(boardCopy, size, sideChosen, i, 3-player, &row, &col);
+				if (CheckGameOver(boardCopy, size, 3-player, row, col) == 3-player) {
+					*side = sideChosen;
+					*move = i;
+					printf("Blocking opposition %c %d\n", *side, *move);
+					return; //Place token where player can win
 				}
 			}
+			
+			CopyBoard(board, boardCopy); //Reset the copy of the board
 		}
 	}
 }
@@ -607,23 +537,23 @@ void PickRandomSide(char *side, int *move, int size)
 
 //Create border with infromation on sides and moves
 void ConstructBorder(int size, char *boardString) {
-	int count;
+	int count; //String index counter
 	count = 0;
 	for (int i = 0; i < size + 4; i++) {
 		for (int j = 0; j < size + 5; j++) {
-			if (j == size + 4) { // North of south side
-				boardString[count] = '\n';
+			if (j == size + 4) { // North and south side
+				boardString[count] = '\n'; //Make a new row
 			} else if (i == 0 || i == size + 3) {
 				if (j < 2 || j > size + 1) {
 					boardString[count] = '-';
 				} else {
-					boardString[count] = (i == 0) ? 'N' : 'S';
+					boardString[count] = (i == 0) ? 'N' : 'S'; //If i = 0, then enter N to string
 				}
 			} else if (i == 1 || i == size + 2) {
-				if (j < 2 || j > size + 1) {
+				if (j < 2 || j > size + 1) { //Determine if '-' or number should be inserted
 					boardString[count] = '-';
 				} else {
-					boardString[count] = (char)('0' + (j - 2));
+					boardString[count] = (char)('0' + (j - 2)); //Convert integer to character
 				}
 			} else {
 				if (j == 0) { //West side
@@ -637,88 +567,21 @@ void ConstructBorder(int size, char *boardString) {
 					count++;
 					j++;
 				} else {
-					boardString[count] = '.';
+					boardString[count] = '.'; //Enter . for internal part of the board
 				}
 			}
-			count++;
+			count++; //Next string index
 		}
 	}
-	boardString[count] = '\0';
+	boardString[count] = '\0'; //End of string
 }
 
-//Find if there is a pathway for a piece to a certain position
-void GetWinningMove(int board[MAX_SIZE][MAX_SIZE], int i, int j, int size ,char *side, int *move) {
-	//Check if position is available
-	if (board[i][j] != 0) //Position is not available
-		return;
-	
-	int nonZero = 0;
-	for (int k = i; k < size; k++) { //Check down is clear
-		if (board[k][j] != 0) {
-			nonZero++;
-			break;
+void CopyBoard(int board1[MAX_SIZE][MAX_SIZE], int board2[MAX_SIZE][MAX_SIZE]) {//Copy contents of board1 to board2
+	//Loop for every index in both boards
+	for (int i = 0; i < MAX_SIZE; i++) {
+		for (int j = 0; j < MAX_SIZE; j++) {
+			board2[i][j] = board1[i][j]; //i, j at board 1 set to board2 i, j
 		}
 	}
-	
-	if (nonZero == 0 && board[i-1][j] != 0) {
-		*side = 'S';
-		*move = j;
-		printf("Making Winning Move %c %d\n", *side, *move);
-		return;
-	} else {
-		nonZero = 0;
-	}
-	
-	for (int k = i; k >= 0; k--) { //Check up is clear
-		if (board[k][j] != 0) {
-			nonZero++;
-			break;
-		}
-	}
-	
-	if (nonZero == 0 && board[i+1][j] != 0) {
-		*side = 'N';
-		*move = j;
-		printf("Making Winning Move %c %d\n", *side, *move);
-		return;
-	} else {
-		nonZero = 0;
-	}
-	
-	for (int k = j; k >= 0; k--) { //Check left is clear
-		if (board[i][k] != 0) {
-			nonZero++;
-			break;
-		}
-	}
-	
-	if (nonZero == 0 && board[i][j+1] != 0) {
-		*side = 'W';
-		*move = i;
-		printf("Making Winning Move %c %d\n", *side, *move);
-		return;
-	} else {
-		nonZero = 0;
-	}
-	
-	for (int k = j; k < size; k++) { //Check right is clear
-		if (board[i][k] != 0) {
-			nonZero++;
-			break;
-		}
-	}
-	
-	if (nonZero == 0 && board[i][j-1] != 0) {
-		*side = 'E';
-		*move = i;
-		printf("Making Winning Move %c %d\n", *side, *move);
-		return;
-	} else {
-		nonZero = 0;
-	}
-	
-	*side = *side;
-	*move = *move;
 }
-
 

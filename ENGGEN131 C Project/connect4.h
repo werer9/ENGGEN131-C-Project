@@ -23,6 +23,5 @@ int CheckGameOver(int board[MAX_SIZE][MAX_SIZE], int size, int player, int row, 
 void GetDisplayBoardString(int board[MAX_SIZE][MAX_SIZE], int size, char *boardString);
 void GetMoveBot1(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move);
 void GetMoveBot2(int board[MAX_SIZE][MAX_SIZE], int size, int player, char *side, int *move);
-void GetWinningMove(int board[MAX_SIZE][MAX_SIZE], int i, int j, int size, char *side, int *move);
 /*********************************************************************************/
 
